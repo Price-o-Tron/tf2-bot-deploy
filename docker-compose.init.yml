@@ -1,32 +1,36 @@
 services:
-  minio-init:
-    image: minio/mc:latest
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c '
-        sleep 5 && \
-        mc alias set myminio http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" && \
-        mc mb --ignore-existing myminio/tf2-automatic
-      '
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    networks:
-      - default
-
   minio:
     image: minio/minio:latest
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    env_file:
+      - ./minio.env
     command: server /data
     ports:
       - "9000:9000"
     volumes:
       - minio-data:/data
-    networks:
-      - default
+    # --- ADD THIS HEALTHCHECK ---
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    env_file:
+      - ./minio.env
+    entrypoint: /bin/sh
+    command: >
+      -c "        
+        # Now set the alias using the container's environment
+        mc alias set myminio http://minio:9000 \"$$MINIO_ROOT_USER\" \"$$MINIO_ROOT_PASSWORD\";
+        
+        mc mb --ignore-existing myminio/tf2-automatic;
+        echo 'Bucket setup complete.';
+      "
 
 volumes:
   minio-data:

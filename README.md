@@ -3,22 +3,28 @@
 ## 1. Environment Setup
 - Copy `template.env` to `.env` and fill in your environment variables.
 - Copy `bots/template.env` to `bots/bot1.env` and add your bot's account info.
+- Change `minio.env` for first time initialization of minio.
+
+**Make sure that minio variables are the same across minio.env and bots envs**
 
 ## 2. MinIO Bucket Initialization (Automatic)
+
+### First-time MinIO Initialization
 To automatically create the required MinIO bucket (`tf2-automatic`), use the provided `docker-compose.init.yml`:
 
-1. Ensure your `.env` file contains `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`.
-2. Run the following command to start MinIO and create the bucket:
-   
-	```sh
-	docker compose -f docker-compose.init.yml up minio-init
-	```
-	This will start MinIO and a one-off init container that creates the `tf2-automatic` bucket if it does not exist.
-3. After the bucket is created, you can stop the init containers:
-   
-	```sh
-	docker compose -f docker-compose.init.yml down
-	```
+1. Ensure your `minio.env` file contains `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`.
+2. Run the following command to start MinIO and the init container:
+
+   ```sh
+   docker compose -f docker-compose.init.yml up -d
+   ```
+   This will start MinIO and a one-off init container that creates the bucket if it does not exist.
+
+3. After the bucket is created (check logs if needed), stop the init containers:
+
+   ```sh
+   docker compose -f docker-compose.init.yml down
+   ```
 
 ## 3. Start All Services
 Start your main stack as usual:
