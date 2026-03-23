@@ -145,7 +145,7 @@ services:
       - './bots/bot1.env'
 
   app:
-    image: docker pull ghcr.io/price-o-tron/tf2-bot:master
+    image: ghcr.io/price-o-tron/tf2-bot:master
     restart: unless-stopped
     depends_on:
       rabbitmq:
