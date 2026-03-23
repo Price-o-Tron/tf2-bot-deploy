@@ -145,7 +145,6 @@ services:
       - './bots/bot1.env'
 
   app:
-    # Change this to your app image
     image: docker pull ghcr.io/price-o-tron/tf2-bot:master
     restart: unless-stopped
     depends_on:
