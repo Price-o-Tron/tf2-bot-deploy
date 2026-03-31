@@ -1,5 +1,5 @@
 x-base-bot: &base-bot
-  image: ghcr.io/tf2-automatic/bot:latest
+  image: ghcr.io/tf2-automatic/bot:11.2
   restart: unless-stopped
   depends_on:
     - rabbitmq
@@ -16,7 +16,7 @@ x-base-bot: &base-bot
     RABBITMQ_PORT: 5672
     RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER}
     RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
-    RABBITMQ_VHOST: ''
+    RABBITMQ_VHOST: '/'
 
 volumes:
   rabbitmq:
@@ -91,7 +91,7 @@ services:
       - redis:/data
 
   bot-manager:
-    image: ghcr.io/tf2-automatic/bot-manager:latest
+    image: ghcr.io/tf2-automatic/bot-manager:11.2
     restart: unless-stopped
     depends_on:
       rabbitmq:
@@ -110,7 +110,7 @@ services:
       <<: *rmq-redis-env
     
   bptf-manager:
-    image: ghcr.io/tf2-automatic/bptf-manager:latest
+    image: ghcr.io/tf2-automatic/bptf-manager:11.2
     restart: unless-stopped
     ports:
       - '3000'
@@ -142,7 +142,7 @@ services:
       start_period: 10s
 
   item-service:
-    image: ghcr.io/tf2-automatic/item-service:latest
+    image: ghcr.io/tf2-automatic/item-service:11.2
     restart: unless-stopped
     depends_on:
       rabbitmq:

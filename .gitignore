@@ -1,3 +1,4 @@
 .env
 bots/*.env
 !bots/template.env
+s3_config.json
