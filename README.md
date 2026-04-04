@@ -7,7 +7,7 @@
 
 **Make sure that seaweed variables are the same across s3_config.json and bots envs**
 
-## 3. Start All Services
+## 2. Start All Services
 Start your main stack as usual:
 
 ```sh
@@ -15,6 +15,9 @@ docker compose up -d
 ```
 
 ----
+
+## 3. How to update
+docker compose pull && docker compose up -d
 
 ### Adding More Bots
 Copy the `bot1` service template at the bottom of `docker-compose.yml`, rename the service, and update the corresponding env file.
