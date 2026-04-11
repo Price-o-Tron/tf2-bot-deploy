@@ -99,7 +99,7 @@ services:
       redis:
         condition: service_healthy
     ports:
-      - '3000:3000'
+      - '3000'
     healthcheck:
       test: ['CMD', 'wget', '-qO-', 'http://localhost:3000/health']
       interval: 10s
@@ -113,7 +113,7 @@ services:
     image: ghcr.io/tf2-automatic/bptf-manager:11.2
     restart: unless-stopped
     ports:
-      - '3002:3000'
+      - '3000'
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -151,8 +151,14 @@ services:
         condition: service_healthy
       bot-manager:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"] # Assuming it has a /health endpoint
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 5s
     ports:
-      - '3003:3000'
+      - '3000'
     environment:
       <<: *rmq-redis-env
     env_file:
@@ -169,7 +175,7 @@ services:
       postgres:
         condition: service_healthy
       item-service:
-        condition: service_started
+        condition: service_healthy
       bptf-manager:
         condition: service_started
     environment:
