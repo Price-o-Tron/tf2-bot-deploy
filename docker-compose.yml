@@ -99,7 +99,7 @@ services:
       redis:
         condition: service_healthy
     ports:
-      - '3000'
+      - '3000:3000'
     healthcheck:
       test: ['CMD', 'wget', '-qO-', 'http://localhost:3000/health']
       interval: 10s
@@ -113,7 +113,7 @@ services:
     image: ghcr.io/tf2-automatic/bptf-manager:11.2
     restart: unless-stopped
     ports:
-      - '3000'
+      - '3002:3000'
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -152,7 +152,7 @@ services:
       bot-manager:
         condition: service_healthy
     ports:
-      - '3000'
+      - '3003:3000'
     environment:
       <<: *rmq-redis-env
     env_file:
