@@ -58,7 +58,7 @@ services:
       "
 
   seaweed:
-    image: chrislusf/seaweedfs:latest
+    image: chrislusf/seaweedfs:4.34
     restart: unless-stopped
     # Points to the mounted config file
     command: 'server -s3 -s3.config=/etc/seaweedfs/s3_config.json -dir=/data -s3.allowEmptyFolder=true'
