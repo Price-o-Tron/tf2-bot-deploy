@@ -1,0 +1,6 @@
+# Terminates HTTPS for the Price-o-Tron bot app. BOT_DOMAIN comes from .env (see setup.sh).
+# Caddy requests and renews the Let's Encrypt certificate automatically.
+{$BOT_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:3000
+}
