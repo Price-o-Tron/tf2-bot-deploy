@@ -1,5 +1,5 @@
 x-base-bot: &base-bot
-  image: ghcr.io/tf2-automatic/bot:11.3.3
+  image: ghcr.io/tf2-automatic/bot:12.0.0
   restart: unless-stopped
   depends_on:
     - rabbitmq
@@ -112,7 +112,7 @@ services:
       - redis:/data
 
   bot-manager:
-    image: ghcr.io/tf2-automatic/bot-manager:11.3
+    image: ghcr.io/tf2-automatic/bot-manager:12.0.0
     restart: unless-stopped
     depends_on:
       rabbitmq:
@@ -131,7 +131,7 @@ services:
       <<: *rmq-redis-env
     
   bptf-manager:
-    image: ghcr.io/tf2-automatic/bptf-manager:11.2.3
+    image: ghcr.io/tf2-automatic/bptf-manager:12.0.0
     restart: unless-stopped
     expose:
       - '3000'
@@ -163,7 +163,7 @@ services:
       start_period: 10s
 
   item-service:
-    image: ghcr.io/tf2-automatic/item-service:11.3
+    image: ghcr.io/tf2-automatic/item-service:12.0.0
     restart: unless-stopped
     depends_on:
       rabbitmq:
