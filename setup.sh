@@ -33,6 +33,21 @@ command -v docker >/dev/null || fail "Docker is not installed."
 docker compose version >/dev/null 2>&1 || fail "Docker Compose v2 is required ('docker compose')."
 [ -f .env ] || fail "No .env yet. Copy template.env to .env and fill it in first (see README), then run this again."
 
+# SECRET_TOKEN signs every request that changes your bot's prices. Empty or short means anyone on the
+# internet could sign them (the bot also refuses to start), so stop here before changing anything.
+check_secret_token() {
+  local line value
+  line="$(grep -E '^[[:space:]]*SECRET_TOKEN=' .env | tail -n1 || true)"   # no line at all is "empty", not an abort
+  value="$(printf '%s' "$line" | sed -E 's/^[[:space:]]*SECRET_TOKEN=//; s/[[:space:]]+#.*$//; s/^"(.*)"$/\1/' | sed -E "s/^'(.*)'\$/\1/")"
+  if [ "${#value}" -lt 32 ]; then
+    fail "SECRET_TOKEN in .env is empty or too short (needs at least 32 characters).
+It must be the token you generated in Price-o-Tron: Profile -> Generate Encrypted Token (Get Started, step 2).
+Paste that token into .env as SECRET_TOKEN=\"...\" and run ./setup.sh again.
+Without it anyone on the internet could change your bot's prices, so the bot refuses to start."
+  fi
+}
+check_secret_token
+
 public_ip() {
   local ip url
   for url in https://api.ipify.org https://ipv4.icanhazip.com https://ifconfig.me/ip; do

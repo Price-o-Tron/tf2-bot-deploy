@@ -8,6 +8,12 @@
 **Make sure that seaweed variables are the same across s3_config.json and bots envs**
 
 ## 2. Run the setup (mandatory)
+Before you run it, `SECRET_TOKEN` in `.env` must be set (at least 32 characters): it is the token you generated in
+Price-o-Tron under Profile -> Generate Encrypted Token. It signs every request that changes your bot's prices.
+`./setup.sh` stops with an explanation if it is empty or too short, and the bot itself refuses to start without it.
+Signed requests must carry a timestamp within 5 minutes of the server's clock and can be used only once (keep the
+server clock in sync with NTP).
+
 HTTPS is part of the stack, so run the setup script once before the first start:
 
 ```sh
